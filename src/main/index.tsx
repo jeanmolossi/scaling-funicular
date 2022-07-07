@@ -1,10 +1,11 @@
 import React from 'react'
 import { Reset } from '@/presentation/styles/reset'
+import { Router } from './router'
 
 export default function App () {
-  return (
+	return (
 		<Reset>
-			<div>Hello, world!</div>
+			<Router />
 		</Reset>
-  )
+	)
 }
