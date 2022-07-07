@@ -1,0 +1,10 @@
+{
+  "name": "scaling-funicular",
+  "version": "1.0.0",
+  "description": "An dev courses platform like netflix",
+  "main": "src/main/index.ts",
+  "repository": "github.com/jeanmolossi/scaling-funicular",
+  "author": "Jean Molossi",
+  "license": "MIT",
+  "private": true
+}
