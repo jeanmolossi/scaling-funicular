@@ -14,7 +14,6 @@ import { Heading, RecoverLink } from './styles'
 
 type Inputs = {
 	email: string
-	password: string
 }
 
 export function RecoverPassword () {
@@ -24,8 +23,8 @@ export function RecoverPassword () {
 	})
 
 	const enabled = useMemo(() => {
-		return !!dirtyFields.email && !!dirtyFields.password
-	}, [dirtyFields.email, dirtyFields.password])
+		return !!dirtyFields.email
+	}, [dirtyFields.email])
 
 	const onSubmit = async (data: Inputs) => {
 		await new Promise(resolve => setTimeout(resolve, 5000))
