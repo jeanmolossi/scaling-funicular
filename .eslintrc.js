@@ -33,7 +33,7 @@ module.exports = {
 				groups: [
 					'/react/',
 					'module',
-					'/^@\\/\\.+/',
+					'/^@\\/.+/',
 					'/^@\\/presentation/',
 					'/^@\\/data/',
 					'/^@\\/domain/',
@@ -42,5 +42,10 @@ module.exports = {
 				alphabetize: { order: 'asc', ignoreCase: true }
 			}
 		]
+	},
+	settings: {
+		react: {
+			version: 'detect'
+		}
 	}
 }

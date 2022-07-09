@@ -1,13 +1,10 @@
 import React from 'react'
-import { useAuth } from '@/presentation/providers'
+import { AuthLayout } from '@/presentation/components'
 
 export const Browse = () => {
-	const { signout } = useAuth()
-
 	return (
-		<div>
-			<button onClick={signout}>Signout</button>
+		<AuthLayout>
 			<h1>Protected page</h1>
-		</div>
+		</AuthLayout>
 	)
 }
