@@ -1,11 +1,13 @@
 version: "3"
 
 services:
-  web_client:
-    build: .
-    container_name: web_client
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/usr/src/app
-      - ./node_modules:/usr/src/app/node_modules
+    web_client:
+        build: .
+        container_name: web_client
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/usr/src/app
+            - ./node_modules:/usr/src/app/node_modules
+        env_file:
+            .env.development.local
