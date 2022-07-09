@@ -1,17 +1,22 @@
 import React, { useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { FiEye, FiEyeOff, FiLock, FiLogIn, FiMail } from 'react-icons/fi'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Fade from '@mui/material/Fade'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment/InputAdornment'
 import { useTheme } from '@mui/material/styles'
+import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import * as yup from 'yup'
 import { UnauthLayout } from '@/presentation/components'
+import { useStorage } from '@/presentation/hooks/use-storage'
+import { useAuth } from '@/presentation/providers'
 import { Heading, RecoverLink } from './styles'
 
 type Inputs = {
@@ -19,8 +24,18 @@ type Inputs = {
 	password: string
 }
 
+type LocationType = { state?: { from?: { pathname: string; } } }
+
 export function Login () {
 	const theme = useTheme()
+	const { signin } = useAuth()
+	const navigate = useNavigate()
+	const location = useLocation() as LocationType
+
+	const [remember, setRemember] = useStorage<boolean>('remember')
+
+	const from = location.state?.from?.pathname || '/'
+
 	const { handleSubmit, control, formState: { errors, dirtyFields, isSubmitting } } = useForm<Inputs>({
 		resolver: yupResolver(loginSchemaValidator)
 	})
@@ -33,8 +48,11 @@ export function Login () {
 
 	const togglePassword = () => setShowPassword(!showPassword)
 
-	const onSubmit = async (data: Inputs) => {
+	const onSubmit = async ({ email, password }: Inputs) => {
 		await new Promise(resolve => setTimeout(resolve, 5000))
+		signin(email, password, () => {
+			navigate(from, { replace: true })
+		})
 	}
 
 	return (
@@ -137,6 +155,21 @@ export function Login () {
 								)
 							}}
 						/>}
+					/>
+				</Grid>
+
+				<Grid item xs={12} paddingX={'0 !important'}>
+					<FormControlLabel
+						control={
+							<Switch
+								value="remember"
+								color="primary"
+								onChange={(_, checked) => setRemember(checked)}
+								inputProps={{ 'aria-label': 'controlled' }}
+								defaultChecked={remember}
+							/>
+						}
+						label="Manter-me conectado"
 					/>
 				</Grid>
 
