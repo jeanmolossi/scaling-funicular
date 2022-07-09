@@ -45,16 +45,19 @@ export function Login () {
 
 			<Grid
 				container
-				paddingX={12}
+				paddingX={{ xs: 6, sm: 12 }}
 				maxWidth={theme.breakpoints.values.sm}
+				width="100%"
 				marginX="auto"
 				spacing={theme.spacing(3)}
 				component={'form'}
 				onSubmit={handleSubmit(onSubmit)}
-				alignItems={'center'}
+				alignItems={'stretch'}
 				justifyContent={'center'}
+				flexDirection={'column'}
+				sx={{ transitionProperty: 'padding', transitionDuration: '200ms' }}
 			>
-				<Grid item xs={12}>
+				<Grid item xs={12} paddingX={'0 !important'}>
 					<Controller
 						name='email'
 						control={control}
@@ -79,7 +82,7 @@ export function Login () {
 
 				</Grid>
 
-				<Grid item xs={12}>
+				<Grid item xs={12} paddingX={'0 !important'}>
 					<Controller
 						name='password'
 						rules={{ required: true }}
@@ -137,7 +140,7 @@ export function Login () {
 					/>
 				</Grid>
 
-				<Grid item xs={12}>
+				<Grid item xs={12} paddingX={'0 !important'}>
 					<Button
 						fullWidth
 						size='large'
@@ -151,7 +154,7 @@ export function Login () {
 					</Button>
 				</Grid>
 
-				<Grid item xs={12}>
+				<Grid item xs={12} paddingX={'0 !important'}>
 					<RecoverLink to={'/recuperar-senha'}>
 						Esqueceu sua senha ?
 					</RecoverLink>
