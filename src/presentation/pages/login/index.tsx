@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { FiEye, FiEyeOff, FiLock, FiLogIn, FiMail } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -24,33 +24,24 @@ type Inputs = {
 	password: string
 }
 
-type LocationType = { state?: { from?: { pathname: string; } } }
-
 export function Login () {
 	const theme = useTheme()
 	const { signin } = useAuth()
 	const navigate = useNavigate()
-	const location = useLocation() as LocationType
+	const location = useLocation() as { state?: { from?: { pathname: string; } } }
+	const formHook = useForm<Inputs>({ resolver: loginSchemaValidator })
 
 	const [remember, setRemember] = useStorage<boolean>('remember')
-
-	const from = location.state?.from?.pathname || '/'
-
-	const { handleSubmit, control, formState: { errors, dirtyFields, isSubmitting } } = useForm<Inputs>({
-		resolver: yupResolver(loginSchemaValidator)
-	})
-
-	const enabled = useMemo(() => {
-		return !!dirtyFields.email && !!dirtyFields.password
-	}, [dirtyFields.email, dirtyFields.password])
-
 	const [showPassword, setShowPassword] = useState(false)
 
-	const togglePassword = () => setShowPassword(!showPassword)
+	const { handleSubmit, control, formState: { errors, dirtyFields, isSubmitting } } = formHook
+	const enabled = useMemo(() => !!dirtyFields.email && !!dirtyFields.password, [dirtyFields.email, dirtyFields.password])
 
+	const togglePassword = useCallback(() => setShowPassword(!showPassword), [showPassword])
+
+	const from = location.state?.from?.pathname || '/'
 	const onSubmit = async ({ email, password }: Inputs) => {
-		await new Promise(resolve => setTimeout(resolve, 5000))
-		signin(email, password, () => {
+		await signin(email, password, () => {
 			navigate(from, { replace: true })
 		})
 	}
@@ -166,7 +157,7 @@ export function Login () {
 								color="primary"
 								onChange={(_, checked) => setRemember(checked)}
 								inputProps={{ 'aria-label': 'controlled' }}
-								defaultChecked={remember}
+								checked={remember}
 							/>
 						}
 						label="Manter-me conectado"
@@ -197,7 +188,7 @@ export function Login () {
 	)
 }
 
-const loginSchemaValidator = yup.object({
+const loginSchemaValidator = yupResolver(yup.object({
 	email: yup
 		.string()
 		.email('Insira um e-mail válido')
@@ -207,4 +198,4 @@ const loginSchemaValidator = yup.object({
 		.min(6, 'A senha deve conter pelo menos 6 caracteres')
 		.max(64, 'A senha deve conter no máximo 64 caracteres')
 		.required('A senha é obrigatória')
-})
+}))
