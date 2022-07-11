@@ -37,7 +37,10 @@ module.exports = {
 					'/^@\\/presentation/',
 					'/^@\\/data/',
 					'/^@\\/domain/',
-					['parent', 'sibling', 'index']
+					'sibling',
+					'parent',
+					'index',
+					'/\\.+/'
 				],
 				alphabetize: { order: 'asc', ignoreCase: true }
 			}
