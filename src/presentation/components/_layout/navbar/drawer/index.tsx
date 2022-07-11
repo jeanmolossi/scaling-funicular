@@ -31,7 +31,16 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 	}
 
 	return (
-		<React.Fragment>
+		<Box
+			position={'fixed'}
+			top={0}
+			left={0}
+			right={0}
+			p={1}
+			display={'flex'}
+			justifyContent={'flex-end'}
+			bgcolor={'#121213'}
+		>
 			<Button onClick={toggleDrawer}>
 				<Dehaze sx={{ color: 'whitesmoke' }} />
 			</Button>
@@ -48,7 +57,7 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 				>
 					<List>
 						<ListItem disablePadding>
-							<ListItemButton LinkComponent={Link} href={'/browse'}>
+							<ListItemButton component={Link} to={'/browse'}>
 								<ListItemIcon><Home /></ListItemIcon>
 								<ListItemText primary={'Inicio'} />
 							</ListItemButton>
@@ -58,9 +67,9 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 					<Divider />
 
 					<List>
-						{courses.map(({ id, title, icon: Icon }) => (
+						{courses.map(({ id, title, to, icon: Icon }) => (
 							<ListItem key={id} disablePadding>
-								<ListItemButton>
+								<ListItemButton component={Link} to={to}>
 									<ListItemIcon><Icon /></ListItemIcon>
 									<ListItemText primary={title} />
 								</ListItemButton>
@@ -80,7 +89,7 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 
 						{mySection.map(({ to, label, icon: Icon }, index) => (
 							<ListItem key={index} disablePadding>
-								<ListItemButton LinkComponent={Link} href={to}>
+								<ListItemButton component={Link} to={to}>
 									<ListItemIcon><Icon /></ListItemIcon>
 									<ListItemText primary={label} />
 								</ListItemButton>
@@ -96,7 +105,7 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 					</List>
 				</Box>
 			</Drawer>
-		</React.Fragment>
+		</Box>
 	)
 }
 
