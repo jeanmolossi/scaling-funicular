@@ -1,6 +1,7 @@
 module.exports = {
 	globals: {
-		JSX: true
+		JSX: true,
+		NodeJS: true
 	},
 	env: {
 		browser: true,
