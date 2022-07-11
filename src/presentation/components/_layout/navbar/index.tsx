@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
-import { IconType } from 'react-icons'
-import { QuestionMarkRounded, School, ShoppingCartRounded, SvgIconComponent } from '@mui/icons-material'
+import { School } from '@mui/icons-material'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { appRoutes, RouteConf, userRoutes } from '@/@shared/routes.config'
 import RenderIf from '@/presentation/components/helpers/render-if'
 import { darkTheme } from '@/presentation/styles/theme'
 
@@ -17,13 +17,13 @@ export const Navbar = () => {
 		<>
 			<RenderIf condition={mediaMatch}>
 				<Suspense>
-					<LazySmallUp courses={courses} mySection={mySection} />
+					<LazySmallUp app={appRoutes} courses={courses} mySection={userRoutes} />
 				</Suspense>
 			</RenderIf>
 
 			<RenderIf condition={!mediaMatch}>
 				<Suspense>
-					<LazyDrawer courses={courses} mySection={mySection} />
+					<LazyDrawer app={appRoutes} courses={courses} mySection={userRoutes} />
 				</Suspense>
 			</RenderIf>
 
@@ -31,66 +31,77 @@ export const Navbar = () => {
 	)
 }
 
-export type Section = {
-	label: string;
-	to: string;
-	icon: IconType | SvgIconComponent;
-	dividerBefore?: boolean
-}
-
-export const mySection: Section[] = [
-	{
-		label: 'Minhas compras',
-		to: '/minhas-compras',
-		icon: ShoppingCartRounded
-	},
-	{
-		label: 'Ajuda',
-		to: '/ajuda',
-		icon: QuestionMarkRounded,
-		dividerBefore: true
-	}
-]
-
-export type Course = {
-	id: string
-	title: string
-	to: string
-	locked?: boolean
-	icon: IconType | SvgIconComponent
-}
-const courses: Course[] = [
+const courses: RouteConf.App[] = [
 	{
 		id: '1',
 		to: '/course/1',
-		title: 'Course 1',
-		locked: false,
+		label: 'Course 1',
 		icon: School
 	},
 	{
 		id: '2',
 		to: '/course/2',
-		title: 'Course 2',
-		locked: true,
+		label: 'Course 2',
 		icon: School
 	},
 	{
 		id: '3',
 		to: '/course/3',
-		title: 'Course 3',
-		locked: true,
+		label: 'Course 3',
 		icon: School
 	},
 	{
 		id: '4',
 		to: '/course/4',
-		title: 'Course 4',
-		locked: true,
+		label: 'Course 4',
+		icon: School
+	},
+	{
+		id: '5',
+		to: '/course/5',
+		label: 'Course 5',
+		icon: School
+	},
+	{
+		id: '6',
+		to: '/course/6',
+		label: 'Course 6',
+		icon: School
+	},
+	{
+		id: '7',
+		to: '/course/7',
+		label: 'Course 7',
+		icon: School
+	},
+	{
+		id: '8',
+		to: '/course/8',
+		label: 'Course 8',
+		icon: School
+	},
+	{
+		id: '9',
+		to: '/course/9',
+		label: 'Course 9',
+		icon: School
+	},
+	{
+		id: '10',
+		to: '/course/10',
+		label: 'Course 10',
+		icon: School
+	},
+	{
+		id: '11',
+		to: '/course/11',
+		label: 'Course 11',
 		icon: School
 	}
 ]
 
 export interface MenuProps {
-	mySection: Section[];
-	courses: Course[];
+	app: RouteConf.App[];
+	mySection: RouteConf.User[];
+	courses: RouteConf.App[];
 }

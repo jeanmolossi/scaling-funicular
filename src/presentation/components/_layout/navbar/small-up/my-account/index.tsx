@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Logout } from '@mui/icons-material'
-import { Menu, MenuItem, Avatar, Divider, ListItemIcon } from '@mui/material'
-import RenderIf from '@/presentation/components/helpers/render-if'
+import { Menu, MenuItem, ListItemIcon } from '@mui/material'
 import { useAuth } from '@/presentation/providers'
 import { MenuProps } from '../..'
 
@@ -52,13 +51,9 @@ const MyAccount = ({ anchorEl, onClose, mySection }: MyAccountProps) => {
 			transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 			anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 		>
-			<MenuItem component={Link} to="/dados-pessoais">
-				<Avatar /> Dados pessoais
-			</MenuItem>
 
-			{mySection.map(({ to, label, icon: Icon, dividerBefore }, index) => (
+			{mySection.map(({ to, label, icon: Icon }, index) => (
 				<MenuItem component={Link} to={to} key={index}>
-					<RenderIf condition={!!dividerBefore}><Divider /></RenderIf>
 					<ListItemIcon>
 						<Icon />
 					</ListItemIcon>

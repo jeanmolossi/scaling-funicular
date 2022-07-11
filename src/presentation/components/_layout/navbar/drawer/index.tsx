@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dehaze, Home, Logout } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
+import { Dehaze, Logout } from '@mui/icons-material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -10,11 +9,12 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import { useAuth } from '@/presentation/providers'
 import ListItemText from '@mui/material/ListItemText'
+import { RouteConf } from '@/@shared/routes.config'
+import { useAuth } from '@/presentation/providers'
 import { MenuProps } from '..'
 
-const DrawerMenu = ({ courses, mySection }: MenuProps) => {
+const DrawerMenu = ({ app, courses, mySection }: MenuProps) => {
 	const { signout } = useAuth()
 	const [open, setOpen] = useState(false)
 
@@ -55,46 +55,18 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 					onClick={toggleDrawer}
 					onKeyDown={toggleDrawer}
 				>
+					{ListItemHandler(app, { listAsWrapper: true })}
+
+					<Divider />
+
 					<List>
-						<ListItem disablePadding>
-							<ListItemButton component={Link} to={'/browse'}>
-								<ListItemIcon><Home /></ListItemIcon>
-								<ListItemText primary={'Inicio'} />
-							</ListItemButton>
-						</ListItem>
+						{ListItemHandler(courses)}
 					</List>
 
 					<Divider />
 
 					<List>
-						{courses.map(({ id, title, to, icon: Icon }) => (
-							<ListItem key={id} disablePadding>
-								<ListItemButton component={Link} to={to}>
-									<ListItemIcon><Icon /></ListItemIcon>
-									<ListItemText primary={title} />
-								</ListItemButton>
-							</ListItem>
-						))}
-					</List>
-
-					<Divider />
-
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton component={Link} to={'/dados-pessoais'}>
-								<ListItemIcon><Avatar sx={{ width: 32, height: 32 }} /></ListItemIcon>
-								<ListItemText primary={'Dados pessoais'} />
-							</ListItemButton>
-						</ListItem>
-
-						{mySection.map(({ to, label, icon: Icon }, index) => (
-							<ListItem key={index} disablePadding>
-								<ListItemButton component={Link} to={to}>
-									<ListItemIcon><Icon /></ListItemIcon>
-									<ListItemText primary={label} />
-								</ListItemButton>
-							</ListItem>
-						))}
+						{ListItemHandler(mySection)}
 
 						<ListItem disablePadding>
 							<ListItemButton onClick={signout}>
@@ -106,6 +78,28 @@ const DrawerMenu = ({ courses, mySection }: MenuProps) => {
 				</Box>
 			</Drawer>
 		</Box>
+	)
+}
+
+interface ListItemHandlerConfig {
+	listAsWrapper?: boolean
+}
+
+const ListItemHandler = (routes: RouteConf.App[] | RouteConf.User[], config: ListItemHandlerConfig = {}) => {
+	const { listAsWrapper = false } = config
+	const Wrapper = listAsWrapper ? List : React.Fragment
+
+	return (
+		<Wrapper>
+			{routes.map(({ to, label, icon: Icon }, index) => (
+				<ListItem key={index} disablePadding>
+					<ListItemButton component={Link} to={to}>
+						<ListItemIcon><Icon /></ListItemIcon>
+						<ListItemText primary={label} />
+					</ListItemButton>
+				</ListItem>
+			))}
+		</Wrapper>
 	)
 }
 
