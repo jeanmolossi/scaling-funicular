@@ -24,7 +24,7 @@ const SmallUp = ({ app, courses, mySection }: MenuProps) => {
 	}
 
 	return (
-		<Grid container item display={{ xs: 'column', sm: 'row' }}>
+		<Grid container item display={{ xs: 'column', sm: 'row' }} paddingX={2}>
 			<Grid item>
 				<h1>Logo</h1>
 			</Grid>
