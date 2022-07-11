@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { useSession, useStorage } from '@/presentation/hooks/use-storage'
 import { Authenticator } from '@/data/auth'
+import { useSession, useStorage } from '@/presentation/hooks/use-storage'
 
 interface AuthContextType {
 	student: any;
