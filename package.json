@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.9.3",
     "@hookform/resolvers": "^2.9.3",
     "@mui/icons-material": "^5.8.4",
+    "@mui/joy": "^5.0.0-alpha.35",
     "@mui/material": "^5.8.7",
     "amazon-cognito-identity-js": "^5.2.10",
     "axios": "^0.27.2",
