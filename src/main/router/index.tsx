@@ -8,57 +8,61 @@ const MakeLoginFactory = React.lazy(() => import('../factory/pages/login'))
 const MakeRecoverPasswordFactory = React.lazy(() => import('../factory/pages/recover-password'))
 const MakeResetPasswordFactory = React.lazy(() => import('../factory/pages/reset-password'))
 const MakeBrowseFactory = React.lazy(() => import('../factory/pages/browse'))
+const MakeBrowseMoreInfoFactory = React.lazy(() => import('../factory/pages/browse-more-info'))
 
 export function Router () {
 	return (
 		<BrowserRouter>
 			<WithRouterProvider>
-				<Routes>
-					<Route
-						index
-						element={
-							<Suspense fallback={<CircularProgress size={32} />}>
+				<Suspense fallback={<CircularProgress size={32} />}>
+					<Routes>
+						<Route
+							index
+							element={
 								<MakeLoginFactory />
-							</Suspense>
-						}
-					/>
+							}
+						/>
 
-					<Route
-						path='/recuperar-senha'
-						element={
-							<Suspense fallback={<CircularProgress size={32} />}>
+						<Route
+							path='/recuperar-senha'
+							element={
 								<MakeRecoverPasswordFactory />
-							</Suspense>
-						}
-					/>
+							}
+						/>
 
-					<Route
-						path='/resetar-senha/:token'
-						element={
-							<Suspense fallback={<CircularProgress size={32} />}>
+						<Route
+							path='/resetar-senha/:token'
+							element={
 								<MakeResetPasswordFactory />
-							</Suspense>
-						}
-					/>
+							}
+						/>
 
-					<Route
-						path="/browse"
-						element={
-							<RequireAuth>
-								<Suspense fallback={<CircularProgress size={32} />}>
+						<Route
+							path="/browse"
+							element={
+								<RequireAuth>
 									<MakeBrowseFactory />
-								</Suspense>
-							</RequireAuth>
-						}
-					/>
+								</RequireAuth>
+							}
+						>
+							<Route
+								path="/browse/about/:id"
+								element={
+									<RequireAuth>
+										<MakeBrowseMoreInfoFactory />
+									</RequireAuth>
+								}
+							/>
+						</Route>
 
-					<Route
-						path="*"
-						element={
-							<Navigate to={'/'} />
-						}
-					/>
-				</Routes>
+						<Route
+							path="*"
+							element={
+								<Navigate to={'/'} />
+							}
+						/>
+					</Routes>
+				</Suspense>
 			</WithRouterProvider>
 		</BrowserRouter>
 	)

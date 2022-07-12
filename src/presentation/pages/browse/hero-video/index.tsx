@@ -6,10 +6,13 @@ import { CssVarsProvider } from '@mui/joy/styles'
 import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import { useModal } from '@/presentation/hooks/use-modal'
 import { MoreInfoOverlay, VideoWrapper } from './styles'
 import fallbackvideo from 'assets/videos/with-sound.mp4'
 
 const HeroVideo = () => {
+	const { onClick } = useModal({ to: '/browse/about/1' })
+
 	return (
 		<VideoWrapper>
 			<CssVarsProvider>
@@ -74,8 +77,8 @@ const HeroVideo = () => {
 						size="large"
 						variant='contained'
 						startIcon={<Info />}
-						component={Link}
-						to="/course/1/lesson/1"
+						component={'a'}
+						onClick={onClick}
 						sx={{ backgroundColor: 'grey.800' }}
 					>Mais detalhes</Button>
 				</Box>
