@@ -47,7 +47,7 @@ const SmallUp = ({ app, courses, mySection }: MenuProps) => {
 				{LinksHandler([...app, ...courses])}
 			</Grid>
 
-			<Grid item flex={0.15} display={'flex'} justifyContent={'stretch'}>
+			<Grid item display={'flex'} justifyContent={'stretch'}>
 				<Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 					<Tooltip title="Minha conta">
 						<IconButton
