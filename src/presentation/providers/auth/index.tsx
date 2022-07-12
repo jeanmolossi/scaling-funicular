@@ -1,36 +1,43 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Authenticator } from '@/data/auth'
+import { Student } from '@/domain/student'
 import { useSession, useStorage } from '@/presentation/hooks/use-storage'
 
 interface AuthContextType {
-	student: any;
+	student: Student;
 	signin: (email: string, password: string, action?: () => void) => Promise<void>;
 	signout: () => Promise<void>;
+	remember: boolean;
+	setRemember: (newValue: boolean | null) => void
 }
 
 const AuthContext = React.createContext<AuthContextType>(null!)
 
 export function AuthProvider ({ children }: { children: React.ReactNode }) {
-	const [remember] = useStorage<boolean>('remember')
-	let [student, setStudent] = useSession<any>('student')
+	const [remember, setRemember] = useStorage<boolean>('remember')
 
 	// if remember me is checked, try to get the student from local storage
-	if (remember) {
-		[student, setStudent] = useStorage('student')
-	}
+	const storageProvider = remember === true
+		? useStorage
+		: useSession
+
+	const [student, setStudent] = storageProvider<Student>('student')
 
 	const authenticator = useMemo(() => new Authenticator(), [])
 
 	const signin = useCallback(async (email: string, password: string, action?: () => void) => {
 		try {
-			const session = await authenticator.signIn(email, password)
-			setStudent(session)
+			const _student = authenticator.getStudentSync(
+				await authenticator.signIn(email, password)
+			)
+
+			setStudent(_student)
 			action?.()
 		} catch (e) {
 			console.error(e)
 		}
-	}, [authenticator])
+	}, [authenticator, remember, setStudent])
 
 	const signout = useCallback(async () => {
 		try {
@@ -39,7 +46,7 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 		} catch (e) {
 			console.error(e)
 		}
-	}, [authenticator])
+	}, [authenticator, setStudent])
 
 	const navigate = useNavigate()
 
@@ -52,7 +59,9 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 	return <AuthContext.Provider value={{
 		student,
 		signin,
-		signout
+		signout,
+		remember,
+		setRemember
 	}}>
 		{children}
 	</AuthContext.Provider>

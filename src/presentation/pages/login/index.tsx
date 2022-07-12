@@ -15,7 +15,6 @@ import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import * as yup from 'yup'
 import { UnauthLayout } from '@/presentation/components'
-import { useStorage } from '@/presentation/hooks/use-storage'
 import { useAuth } from '@/presentation/providers'
 import { Heading, RecoverLink } from './styles'
 
@@ -26,12 +25,11 @@ type Inputs = {
 
 export function Login () {
 	const theme = useTheme()
-	const { signin } = useAuth()
+	const { signin, remember, setRemember } = useAuth()
 	const navigate = useNavigate()
 	const location = useLocation() as { state?: { from?: { pathname: string; } } }
 	const formHook = useForm<Inputs>({ resolver: loginSchemaValidator })
 
-	const [remember, setRemember] = useStorage<boolean>('remember')
 	const [showPassword, setShowPassword] = useState(false)
 
 	const { handleSubmit, control, formState: { errors, dirtyFields, isSubmitting } } = formHook

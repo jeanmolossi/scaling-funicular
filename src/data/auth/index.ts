@@ -1,5 +1,7 @@
 import * as Cognito from 'amazon-cognito-identity-js'
+import { Student } from '@/domain/student'
 import { SessionError } from '../errors/session-error'
+import { Authentication } from './typings'
 
 export class Authenticator {
 	private _user: Cognito.CognitoUser
@@ -25,14 +27,16 @@ export class Authenticator {
 
 		const authenticationDetails = new Cognito.AuthenticationDetails(authenticationData)
 
-		return await new Promise((resolve, reject) => {
+		return await new Promise<Authentication.SessionResult>((resolve, reject) => {
 			this._user.authenticateUser(authenticationDetails, {
-				onSuccess: resolve,
+				onSuccess: (session) => {
+					resolve(session.getIdToken().decodePayload() as Authentication.SessionResult)
+				},
 				onFailure: reject,
 				newPasswordRequired: (_, requiredAttributes: any) => {
 					this._user.completeNewPasswordChallenge(password, requiredAttributes,
 						{
-							onSuccess: resolve,
+							onSuccess: (session) => resolve(session as any),
 							onFailure: reject
 						}
 					)
@@ -55,7 +59,7 @@ export class Authenticator {
 		})
 	}
 
-	public async getSession () {
+	public async getSession () : Promise<Authentication.SessionResult> {
 		return await new Promise((resolve, reject) => {
 			const user = this._userPool.getCurrentUser()
 
@@ -75,8 +79,25 @@ export class Authenticator {
 					return
 				}
 
-				resolve(session)
+				if (!session.isValid()) {
+					reject(new SessionError('invalid session'))
+					return
+				}
+
+				resolve(session.getIdToken().decodePayload() as any)
 			})
 		})
+	}
+
+	public async getStudent (): Promise<Student> {
+		const session = await this.getSession()
+		return new Student(session['cognito:username'], session.email)
+	}
+
+	public getStudentSync (session: Authentication.SessionResult): Student {
+		return new Student(
+			session['cognito:username'],
+			session.email
+		)
 	}
 }
