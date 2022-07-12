@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { Info, PlayCircle } from '@mui/icons-material'
 import AspectRatio from '@mui/joy/AspectRatio'
@@ -7,18 +7,21 @@ import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { MoreInfoOverlay, VideoWrapper } from './styles'
+import fallbackvideo from 'assets/videos/with-sound.mp4'
 
 const HeroVideo = () => {
 	return (
 		<VideoWrapper>
 			<CssVarsProvider>
 				<AspectRatio ratio="16/9" objectFit='cover' maxHeight={window.innerHeight - 48}>
-					<video
-						src='/videos/glitch.mp4'
-						muted
-						autoPlay
-						loop
-					/>
+					<Suspense fallback={'loading'}>
+						<video
+							src={fallbackvideo}
+							muted
+							autoPlay
+							loop
+						/>
+					</Suspense>
 				</AspectRatio>
 			</CssVarsProvider>
 
@@ -39,7 +42,8 @@ const HeroVideo = () => {
 					sx={{
 						overflow: 'hidden',
 						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap'
+						whiteSpace: 'nowrap',
+						textShadow: '0 4px 4px black'
 					}}
 				>
 					#5 - Javascript e o this.
@@ -52,6 +56,7 @@ const HeroVideo = () => {
 						xs: 'none',
 						md: 'block'
 					}}
+					sx={{ textShadow: '0 2px 4px black' }}
 				>
 					Nesta aula, vamos aprender como utilizar o this em Javascript.
 				</Typography>

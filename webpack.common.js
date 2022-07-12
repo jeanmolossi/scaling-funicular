@@ -12,7 +12,8 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json'],
 		alias: {
-			'@': path.resolve(__dirname, 'src')
+			'@': path.resolve(__dirname, 'src'),
+			assets: path.resolve(__dirname, 'assets')
 		},
 		fallback: {
 			path: 'path-browserify'

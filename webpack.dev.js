@@ -15,8 +15,16 @@ module.exports = merge(common, {
 	module: {
 		rules: [
 			{ test: /\.tsx?$/, exclude: /(node_modules)/, use: [{ loader: 'swc-loader' }] },
-			{ test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] }
+			{ test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] },
+			{
+				test: /\.(png|svg|jpe?g|gif|mp4)$/,
+				loader: 'file-loader',
+				options: {
+					outputPath: 'assets/'
+				}
+			}
 		]
+
 	},
 	plugins: [
 		new MiniCssExtractPlugin(),
