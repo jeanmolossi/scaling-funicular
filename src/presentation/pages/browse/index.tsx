@@ -16,7 +16,7 @@ export const Browse = () => {
 				</Suspense>
 			</Box>
 
-			<Box>
+			<Box display={'block'} width="100%" minHeight="100%" marginTop={{ xs: -16, md: -8, lg: -16 }} paddingX={9} zIndex={1}>
 				<Typography variant="h1">Browse</Typography>
 			</Box>
 

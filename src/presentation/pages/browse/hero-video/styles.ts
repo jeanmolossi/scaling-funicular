@@ -9,7 +9,7 @@ export const VideoWrapper = styled(Box)(({ theme }) => ({
 
 export const MoreInfoOverlay = styled(Box)(({ theme }) => ({
 	position: 'absolute',
-	left: theme.spacing(3),
+	left: theme.spacing(9),
 	top: '50%',
 	width: 'clamp(10vw, 100%, 55vw)',
 	display: 'flex',
