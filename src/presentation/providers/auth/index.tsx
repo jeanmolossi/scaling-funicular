@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Authenticator } from '@/data/auth'
+import { HttpClient } from '@/data/protocols/http/http-client'
 import { Student } from '@/domain/student'
 import { useSession, useStorage } from '@/presentation/hooks/use-storage'
 
@@ -24,7 +25,9 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 
 	const [student, setStudent] = storageProvider<Student>('student')
 
-	const authenticator = useMemo(() => new Authenticator(), [])
+	const authenticator = useMemo(() => new Authenticator(
+		new HttpClient(process.env.BASE_API || 'http://localhost:8080')
+	), [])
 
 	const signin = useCallback(async (email: string, password: string, action?: () => void) => {
 		try {
@@ -41,8 +44,8 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 
 	const signout = useCallback(async () => {
 		try {
-			setStudent(null!)
 			await authenticator.signOut()
+			setStudent(null!)
 		} catch (e) {
 			console.error(e)
 		}

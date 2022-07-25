@@ -6,3 +6,6 @@ public/videos/*
 assets/videos/*
 
 !*.gitkeep
+
+.vscode/
+.idea/

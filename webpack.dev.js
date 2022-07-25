@@ -29,7 +29,8 @@ module.exports = merge(common, {
 	plugins: [
 		new MiniCssExtractPlugin(),
 		new DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify('development')
+			'process.env.NODE_ENV': JSON.stringify('development'),
+			'process.env.BASE_API': JSON.stringify(process.env.BASE_API)
 		}),
 		new HtmlWebpackPlugin({
 			template: './templates/index.dev.html'

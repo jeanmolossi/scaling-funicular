@@ -14,21 +14,14 @@ export namespace Authentication {
 		username: string
 	}
 
-	interface IdTokenPayload {
-		aud: string
-		auth_time: number
-		'cognito:username': string
-		email: string
-		email_verified: string
-		event_id: string
-		exp: number
-		iat: number
-		iss: string
-		jti: string
-		origin_jti: string
-		sub: string
-		token_use: string
+	export interface MeStudentResult {
+		student_email: string;
+		student_id: string
 	}
 
-	export type SessionResult = IdTokenPayload
+	interface AccessToken {
+		access_token: string
+	}
+
+	export type SessionResult = AccessToken
 }
