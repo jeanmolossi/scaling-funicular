@@ -26,6 +26,7 @@ module.exports = {
 	],
 	rules: {
 		'no-tabs': 'off',
+		camelcase: 'off',
 		indent: ['error', 'tab'],
 		'no-useless-constructor': 'off',
 		'import-helpers/order-imports': [
