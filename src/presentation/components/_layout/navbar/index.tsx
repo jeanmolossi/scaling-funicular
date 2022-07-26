@@ -8,9 +8,6 @@ import { darkTheme } from '@/presentation/styles/theme'
 const LazySmallUp = React.lazy(() => import('./small-up'))
 const LazyDrawer = React.lazy(() => import('./drawer'))
 
-// TODO: refactor this component
-// Better option in
-// 	https://mui.com/pt/material-ui/react-app-bar/#responsive-app-bar-with-drawer
 export const Navbar = () => {
 	const mediaMatch = useMediaQuery<typeof darkTheme>(
 		(theme) => theme.breakpoints.up('sm')

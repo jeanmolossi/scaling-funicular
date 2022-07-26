@@ -1,75 +1,101 @@
 import React, { Suspense, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, LinearProgress } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import SearchIcon from '@mui/icons-material/Search'
+import { Button, Grid } from '@mui/material'
+import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 import { RouteConf } from '@/@shared/routes.config'
 import { MenuProps } from '..'
+import { Search, SearchIconWrapper, StyledInputBase } from './styles'
 
-const LazyMyAccount = React.lazy(() => import('./my-account'))
+const RenderMenu = React.lazy(() => import('./my-account'))
 
-const SmallUp = ({ app, courses, mySection }: MenuProps) => {
+export default function Alternative ({ app, courses, mySection }: MenuProps) {
 	const [anchorEl, setAnchorEl] = useState<HTMLElement>(null!)
 
-	const open = Boolean(anchorEl)
-
-	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-		setAnchorEl(event.currentTarget)
+	const handleProfileMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(e.currentTarget)
 	}
-	const handleClose = () => {
+
+	const handleMenuClose = () => {
 		setAnchorEl(null!)
 	}
 
+	const menuId = 'account-menu'
+
 	return (
-		<Grid container item display={{ xs: 'column', sm: 'row' }} paddingX={2}>
-			<Grid item>
-				<h1>Logo</h1>
-			</Grid>
+		<Box sx={{ flexGrow: 1 }}>
+			<AppBar position="static">
+				<Toolbar>
+					<IconButton
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="nada"
+						sx={{ mr: 2 }}
+					>
+					</IconButton>
+					<Typography
+						variant="h6"
+						noWrap
+						component="div"
+						sx={{ display: { xs: 'none', sm: 'block' } }}
+					>
+						LOGO
+					</Typography>
+					<Search>
+						<SearchIconWrapper>
+							<SearchIcon />
+						</SearchIconWrapper>
+						<StyledInputBase
+							placeholder="Pesquisar..."
+							inputProps={{ 'aria-label': 'pesquisa' }}
+						/>
+					</Search>
 
-			<Grid
-				item
-				flex={1}
-				display={'flex'}
-				flexWrap={'wrap'}
-				gap={1}
-				p={1}
-				justifyContent={'strech'}
-				alignItems={'center'}
-				textAlign={'center'}
-				maxHeight={'48px'}
-				sx={{
-					overflowY: 'hidden'
-				}}
-			>
-				{LinksHandler([...app, ...courses])}
-			</Grid>
+					<Grid
+						container
+						flex={1}
+						display={'flex'}
+						flexWrap={'wrap'}
+						gap={1}
+						p={1}
+						justifyContent={'strech'}
+						alignItems={'center'}
+						textAlign={'center'}
+						maxHeight={'52px'}
+						sx={{ overflowY: 'hidden' }}
+					>
+						{LinksHandler([...app, ...courses], { maxButtons: 6 })}
+					</Grid>
 
-			<Grid item display={'flex'} justifyContent={'stretch'}>
-				<Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-					<Tooltip title="Minha conta">
+					<Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
 						<IconButton
-							onClick={handleClick}
-							size="small"
-							sx={{ ml: 2 }}
-							aria-controls={open ? 'account-menu' : undefined}
-							aria-expanded={open ? 'true' : undefined}
-							aria-haspopup
+							size="large"
+							edge="end"
+							aria-label="account of current user"
+							aria-controls={menuId}
+							aria-haspopup="true"
+							onClick={handleProfileMenuOpen}
+							color="inherit"
 						>
-							<Avatar sx={{ width: 32, height: 32 }}>
-								<img src="https://via.placeholder.com/32x32" alt="avatar" />
-							</Avatar>
+							<AccountCircle />
 						</IconButton>
-					</Tooltip>
-				</Box>
-
-				<Suspense fallback={<LinearProgress sx={{ top: 0, left: 0, right: 0, position: 'fixed', opacity: 0.5 }} />}>
-					<LazyMyAccount anchorEl={anchorEl} onClose={handleClose} mySection={mySection} />
-				</Suspense>
-			</Grid>
-		</Grid>
+					</Box>
+				</Toolbar>
+			</AppBar>
+			<Suspense>
+				<RenderMenu
+					anchorEl={anchorEl}
+					onClose={handleMenuClose}
+					mySection={mySection}
+				/>
+			</Suspense>
+		</Box>
 	)
 }
 
@@ -97,5 +123,3 @@ function LinksHandler (links: RouteConf.App[], config: LinksHandlerConfig = {}) 
 		</>
 	)
 }
-
-export default SmallUp

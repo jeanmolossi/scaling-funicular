@@ -4,7 +4,7 @@ import { Navbar } from '@/presentation/components/_layout/navbar'
 
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<Grid container paddingTop={{ xs: 7, sm: 0 }}>
+		<Grid container>
 			<Navbar />
 
 			{children}

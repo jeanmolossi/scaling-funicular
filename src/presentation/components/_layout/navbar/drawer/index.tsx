@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dehaze, Logout } from '@mui/icons-material'
+import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+import IconButton from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
@@ -10,6 +11,8 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 import { RouteConf } from '@/@shared/routes.config'
 import { useAuth } from '@/presentation/providers'
 import { MenuProps } from '..'
@@ -31,19 +34,23 @@ const DrawerMenu = ({ app, courses, mySection }: MenuProps) => {
 	}
 
 	return (
-		<Box
-			position={'fixed'}
-			top={0}
-			left={0}
-			right={0}
-			p={1}
-			display={'flex'}
-			justifyContent={'flex-end'}
-			bgcolor={'#121213'}
-		>
-			<Button onClick={toggleDrawer}>
-				<Dehaze sx={{ color: 'whitesmoke' }} />
-			</Button>
+		<Box sx={{ flexGrow: 1 }}>
+			<AppBar position="static">
+				<Toolbar>
+					<Typography
+						variant="h6"
+						noWrap
+						component="div"
+					>
+						LOGO
+					</Typography>
+					<Box sx={{ flexGrow: 1 }} />
+					<IconButton onClick={toggleDrawer}>
+						<Dehaze sx={{ color: 'whitesmoke' }} />
+					</IconButton>
+				</Toolbar>
+			</AppBar>
+
 			<Drawer
 				anchor={'right'}
 				open={open}
