@@ -14,4 +14,8 @@ export class Course extends BaseEntity<string> {
 	get title (): string {
 		return this._title
 	}
+
+	get isPublished (): boolean {
+		return this._published
+	}
 }
