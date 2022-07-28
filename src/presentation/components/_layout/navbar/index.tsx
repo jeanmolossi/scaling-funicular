@@ -37,7 +37,6 @@ export const Navbar = () => {
 					<LazyDrawer app={appRoutes} courses={courses} mySection={userRoutes} />
 				</Suspense>
 			</RenderIf>
-
 		</>
 	)
 }

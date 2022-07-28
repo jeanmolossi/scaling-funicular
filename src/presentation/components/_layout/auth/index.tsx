@@ -4,7 +4,7 @@ import { Navbar } from '@/presentation/components/_layout/navbar'
 
 export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<Grid container>
+		<Grid container flexDirection={'column'}>
 			<Navbar />
 
 			{children}

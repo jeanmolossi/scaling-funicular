@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { CircularProgress } from '@mui/material'
 import { RequireAuth } from '@/presentation/providers'
+import MakeCourse from '../factory/pages/course'
 import { WithRouterProvider } from '../factory/providers/main-provider'
 
 const MakeLoginFactory = React.lazy(() => import('../factory/pages/login'))
@@ -54,6 +55,15 @@ export function Router () {
 								}
 							/>
 						</Route>
+
+						<Route
+							path="/courses/:course_id"
+							element={
+								<RequireAuth>
+									<MakeCourse />
+								</RequireAuth>
+							}
+						/>
 
 						<Route
 							path="*"
