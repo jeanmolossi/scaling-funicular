@@ -72,9 +72,7 @@ const Highlights = () => {
 			cols={columns}
 		>
 			<RenderIf condition={loading}>
-				{arrayMap(columns, (
-					<ListItemSkeleton />
-				))}
+				{arrayMap(columns, <ListItemSkeleton />)}
 			</RenderIf>
 
 			<RenderIf condition={!loading}>

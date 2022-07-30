@@ -37,5 +37,13 @@ export function calcItemDimensionsFreezingRatio (columnWidth: number): Dimension
 }
 
 export function arrayMap (length: number, children: ReactNode) {
-	return Array.from({ length }, () => children)
+	return Array.from({ length }, () => {
+		if (children && typeof children === 'object') {
+			const withKey = Object.create(children)
+			Object.defineProperty(withKey, 'key', { value: Math.random().toString(16) })
+			return withKey
+		}
+
+		return children
+	})
 }
