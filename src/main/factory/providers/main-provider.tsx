@@ -1,6 +1,8 @@
 import React from 'react'
 import { AuthProvider, CoursesProvider } from '@/presentation/providers'
+import { ModulesProvider } from '@/presentation/providers/modules'
 import { makeGetCourses } from '../data/usecase/get-courses'
+import { makeGetModulesFromCourse } from '../data/usecase/modules/get-modules-from-course'
 
 // MainProvider are wrapping all the application's providers
 export function MainProvider ({ children }: { children: React.ReactNode}) {
@@ -20,10 +22,18 @@ export function WithRouterProvider ({ children }: { children: React.ReactNode}) 
 		getCourses
 	}
 
+	const getModulesFromCourse = makeGetModulesFromCourse()
+
+	const modulesFactory = {
+		getModulesFromCourse
+	}
+
 	return (
 		<AuthProvider>
 			<CoursesProvider {...coursesFactory}>
-				{children}
+				<ModulesProvider {...modulesFactory}>
+					{children}
+				</ModulesProvider>
 			</CoursesProvider>
 		</AuthProvider>
 	)
