@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { AuthLayout } from '@/presentation/components'
 
 const LazyHeroVideo = React.lazy(() => import('./hero-video'))
+const LazyHighlights = React.lazy(() => import('./highlights'))
 
 export const Browse = () => {
 	return (
@@ -18,6 +19,10 @@ export const Browse = () => {
 
 			<Box display={'block'} width="100%" minHeight="100%" marginTop={{ xs: -16, md: -8, lg: -16 }} paddingX={9} zIndex={1}>
 				<Typography variant="h1">Browse</Typography>
+
+				<Suspense fallback={<CircularProgress size={32} color="primary" />}>
+					<LazyHighlights />
+				</Suspense>
 			</Box>
 
 			<Outlet />
