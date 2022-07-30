@@ -3,28 +3,38 @@ import { CoursesUseCases } from '@/domain/courses/usecase'
 import { Http } from '../protocols/http/typings'
 
 interface CourseResponse {
-	course_description: string
-	course_id: string
-	course_published: boolean
-	course_thumbnail: string
-	course_title: string
+	data: Array<{
+		course_description: string
+		course_id: string
+		course_published: boolean
+		course_thumbnail: string
+		course_title: string
+	}>
+	meta: Http.Meta
 }
 
 export class GetCourses implements CoursesUseCases.GetCourses {
 	constructor (private readonly httpClient: Http.Client) {}
 
-	async execute (fields = []): Promise<Course[]> {
-		let url = '/course'
-		if (fields.length > 0) {
-			url += '?fields=' + fields.join(',')
-		}
+	async execute (fields = [], pagination: Http.Pagination = {}): Promise<Course[]> {
+		const urlSearch = new URLSearchParams()
 
-		const { data: response } = await this.httpClient.request<CourseResponse[]>({
+		if (fields.length > 0) {
+			urlSearch.set('fields', fields.join(','))
+		}
+		urlSearch.set('page', `${pagination.page ?? 1}`)
+		urlSearch.set('items_per_page', `${pagination.items_per_page ?? 10}`)
+
+		const url = `/course?${urlSearch.toString()}`
+
+		const { data: response } = await this.httpClient.request<CourseResponse>({
 			method: 'GET',
 			url
 		})
 
-		return response.map(course => {
+		const { data: courses } = response
+
+		return courses.map(course => {
 			const {
 				course_id = '',
 				course_description = '',

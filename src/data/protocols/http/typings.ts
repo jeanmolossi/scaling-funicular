@@ -12,6 +12,18 @@ export namespace Http {
 		headers?: { [key: string]: string }
 	}
 
+	export type Meta = {
+		page: number
+		items_per_page: number
+		next_page?: string
+		prev_page?: string
+	}
+
+	export type Pagination = {
+		page?: number
+		items_per_page?: number
+	}
+
 	export type ErrorModels = {
 		error?: string
 		message?: string
