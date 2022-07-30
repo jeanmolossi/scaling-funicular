@@ -14,9 +14,16 @@ export namespace RouteConf {
 	export interface App extends User{}
 }
 
+function randomUID () {
+	if (typeof window.crypto?.randomUUID !== 'undefined') {
+		return window.crypto?.randomUUID()
+	}
+	return Math.random().toString(16)
+}
+
 export const appRoutes: RouteConf.App[] = [
 	{
-		id: window.crypto.randomUUID(),
+		id: randomUID(),
 		label: 'Início',
 		to: '/browse',
 		icon: Home
@@ -26,19 +33,19 @@ export const appRoutes: RouteConf.App[] = [
 export const sizedAvatar = (props: any) => <Avatar sx={{ width: 32, height: 32 }} {...props} />
 export const userRoutes: RouteConf.User[] = [
 	{
-		id: window.crypto.randomUUID(),
+		id: randomUID(),
 		label: 'Dados pessoais',
 		to: '/minha-conta/dados-pessoais',
 		icon: sizedAvatar
 	},
 	{
-		id: window.crypto.randomUUID(),
+		id: randomUID(),
 		label: 'Minhas compras',
 		to: '/minha-conta/minhas-compras',
 		icon: ShoppingCart
 	},
 	{
-		id: window.crypto.randomUUID(),
+		id: randomUID(),
 		label: 'Ajuda',
 		to: '/minha-conta/ajuda',
 		icon: QuestionMarkRounded
