@@ -44,8 +44,8 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 
 	const signout = useCallback(async () => {
 		try {
-			await authenticator.signOut()
 			setStudent(null!)
+			await authenticator.signOut()
 		} catch (e) {
 			console.error(e)
 		}
