@@ -1,12 +1,17 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
-import { PlayCircleFilled } from '@mui/icons-material'
-import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material'
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import CircularProgress from '@mui/material/CircularProgress'
+import ImageList from '@mui/material/ImageList'
 import { Course } from '@/domain/courses'
+import RenderIf from '@/presentation/components/helpers/render-if'
+import { useDebouce } from '@/presentation/hooks/use-debounce'
 import { useWidthFrom } from '@/presentation/hooks/use-width-from'
 import { useCourses } from '@/presentation/providers'
-import { MAX_COLUMNS, THUMB_WIDTH,	THUMB_HEIGHT } from './constants'
+import { arrayMap, setupCourses, setupDimensions } from './behavior'
+import { MAX_COLUMNS } from './constants'
+import ListItem from './list-item'
+import { ListItemSkeleton } from './list-item-skeleton'
 
-interface Dimensions {
+export interface Dimensions {
 	width: number
 	height: number
 }
@@ -23,101 +28,68 @@ const Highlights = () => {
 	// set columns on component by breakpoint
 	const columns = useMemo(() => MAX_COLUMNS[breakpoint], [breakpoint])
 
+	const [thisIsMounted, setThisIsMounted] = useState(false)
+	const [loading, setLoading] = useState(true)
 	const [courses, setCourses] = useState<Course[]>([])
 
 	// dimensions of the every course item
 	const [dimensions, setDimensions] = useState<Dimensions>({
-		width: 100,
+		width: 150,
 		height: 100
 	})
+
+	const debouncedMount = useDebouce(() => setThisIsMounted(true), 5)
 
 	useEffect(() => {
 		if (imageListRef.current) {
 			const containerWidth = imageListRef.current.clientWidth
 			lazyCalc(containerWidth)
+			// that will debounce and only calls after the component is mounted
+			debouncedMount()
+		}
+	}, [columns])
 
-			getCourses.execute()
+	useEffect(() => {
+		if (imageListRef.current && thisIsMounted) {
+			const containerWidth = imageListRef.current.clientWidth
+
+			getCourses.execute(undefined, { items_per_page: columns })
 				.then(
 					setupCourses(setCourses, containerWidth, columns)
 				).then(
 					setupDimensions(setDimensions)
-				)
+				).finally(() => setLoading(false))
 		}
-	}, [breakpoint])
+		// depends on thisIsMounted to be true
+		// it grants only single call to getCourses
+	}, [thisIsMounted])
 
 	return (
 		<ImageList
 			ref={imageListRef}
-			sx={{ width: '100%', transform: 'translateZ(0)' }}
+			sx={{ width: '100%', transform: 'translateZ(0)', marginBottom: 2 }}
 			gap={1}
 			cols={columns}
 		>
-			{courses.map((course) => (
-				<ImageListItem key={course.id}>
-					<img
-						{...srcset(course.thumb, dimensions.width, dimensions.height, 1, 1)}
-						alt={`${course.title} thumbnail`}
-						loading='lazy'
-					/>
+			<RenderIf condition={loading}>
+				{arrayMap(columns, (
+					<ListItemSkeleton />
+				))}
+			</RenderIf>
 
-					<ImageListItemBar
-						title={course.title}
-						subtitle="Descrição do curso"
-						position='bottom'
-						actionIcon={
-							<IconButton>
-								<PlayCircleFilled />
-							</IconButton>
-						}
-						actionPosition="left"
-					/>
-				</ImageListItem>
-			))}
+			<RenderIf condition={!loading}>
+				<Suspense fallback={<CircularProgress size={32} />}>
+					{courses.map((course) => (
+						<ListItem
+							key={course.id}
+							course={course}
+							dimensions={dimensions}
+						/>
+					))}
+				</Suspense>
+			</RenderIf>
 		</ImageList>
 	)
 }
 
 export default Highlights
-
-function srcset (image: string, width: number, height: number, rows = 1, cols = 1) {
-	const wCols = width * cols
-	const hRows = height * rows
-
-	return {
-		src: `${image}?w=${wCols}&h=${hRows}&fit=crop&auto=format`,
-		srcSet: `${image}?w=${wCols}&h=${hRows}&fit=crop&auto=format&dpr=2 2x`
-	}
-}
-
-function setupCourses (setCourses: Dispatch<SetStateAction<Course[]>>, containerWidth: number, maxColumns: number) {
-	return (courses: Course[]): Dimensions => {
-		setCourses(limitResponseToLength(courses, maxColumns))
-
-		const columns = Math.min(courses.length, maxColumns)
-		const columnWidth = containerWidth / columns
-
-		return calcItemDimensionsFreezingRatio(columnWidth)
-	}
-}
-
-function limitResponseToLength<T> (response: T[], length: number = 5) {
-	return response.slice(0, length)
-}
-
-function setupDimensions (setDimensions: Dispatch<SetStateAction<Dimensions>>) {
-	return (dimensions: Dimensions) => {
-		setDimensions(dimensions)
-	}
-}
-
-function calcItemDimensionsFreezingRatio (columnWidth: number): Dimensions {
-	const reductionRatio = columnWidth / THUMB_WIDTH
-
-	const width = Math.floor(columnWidth)
-	const height = Math.floor(THUMB_HEIGHT * reductionRatio)
-
-	return {
-		width,
-		height
-	}
-}
