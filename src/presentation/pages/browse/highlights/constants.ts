@@ -4,6 +4,6 @@ export const MAX_COLUMNS = {
 	md: 3, // 900px UP
 	lg: 4, // 1200px UP
 	xl: 6 // 1536px UP
-}
+} as const
 export const THUMB_WIDTH = 1280
 export const THUMB_HEIGHT = 720
