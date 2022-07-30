@@ -1,13 +1,16 @@
 import React from 'react'
-import Box from '@mui/material/Box'
+import { Outlet } from 'react-router-dom'
+import Typography from '@mui/material/Typography'
 import { AuthLayout } from '@/presentation/components'
 
 export const Course = () => {
 	return (
 		<AuthLayout>
-			<Box display={'block'}>
-				<h1>Course</h1>
-			</Box>
+			<Outlet />
+
+			<Typography variant='h3' component={'h1'}>
+				Escolha uma aula
+			</Typography>
 		</AuthLayout>
 	)
 }
