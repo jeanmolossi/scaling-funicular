@@ -19,7 +19,7 @@ export const Navbar = () => {
 	const [courses, setCourses] = useState<RouteConf.App[]>([])
 
 	useEffect(() => {
-		getCourses.execute(['course_id', 'course_title'])
+		getCourses.execute(['course_id', 'course_title'], { items_per_page: 5 })
 			.then(mapCoursesToRouteConf)
 			.then(setCourses)
 	}, [])
