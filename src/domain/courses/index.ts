@@ -15,6 +15,10 @@ export class Course extends BaseEntity<string> {
 		return this._title
 	}
 
+	get thumb (): string {
+		return this._thumbnail
+	}
+
 	get isPublished (): boolean {
 		return this._published
 	}
