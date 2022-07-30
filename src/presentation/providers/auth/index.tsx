@@ -44,10 +44,11 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 
 	const signout = useCallback(async () => {
 		try {
-			setStudent(null!)
 			await authenticator.signOut()
 		} catch (e) {
 			console.error(e)
+		} finally {
+			setStudent(null!)
 		}
 	}, [authenticator, setStudent])
 
