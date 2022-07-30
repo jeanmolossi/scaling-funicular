@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { PlayCircleFilled } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import ImageListItem from '@mui/material/ImageListItem'
@@ -18,19 +19,21 @@ const ListItem = ({ course, dimensions }: ListItemProps) => {
 				{...srcset(course.thumb, dimensions.width, dimensions.height)}
 				alt={`${course.title} thumbnail`}
 				loading='lazy'
+				style={{ borderRadius: '8px' }}
 			/>
 
-			<ImageListItemBar
+			<Link to={`/courses/${course.id}`}><ImageListItemBar
 				title={course.title}
 				subtitle="Descrição do curso"
 				position='bottom'
 				actionIcon={
-					<IconButton>
+					<IconButton LinkComponent={'a'}>
 						<PlayCircleFilled />
 					</IconButton>
 				}
 				actionPosition="left"
 			/>
+			</Link>
 		</ImageListItem>
 	)
 }
