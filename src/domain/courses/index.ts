@@ -1,6 +1,9 @@
 import { BaseEntity } from '../entity'
+import { Module } from '../modules'
 
 export class Course extends BaseEntity<string> {
+	private _modules: Module[] = []
+
 	constructor (
 		protected _id: string,
 		private _description: string,
@@ -21,5 +24,13 @@ export class Course extends BaseEntity<string> {
 
 	get isPublished (): boolean {
 		return this._published
+	}
+
+	public attachModule (module: Module): void {
+		this._modules.push(module)
+	}
+
+	public attachModules (modules: Module[]): void {
+		modules.forEach(this.attachModule.bind(this))
 	}
 }

@@ -11,10 +11,10 @@ interface CourseModule {
 	module_published: boolean
 }
 
-// interface ModulesResponse {
-// 	data: Array<CourseModule>
-// 	meta: Http.Meta
-// }
+interface ModulesResponse {
+	data: Array<CourseModule>
+	meta: Http.Meta
+}
 
 export class GetModulesFromCourse implements ModulesUseCases.GetModulesFromCourse {
 	constructor (private readonly httpClient: Http.Client) {}
@@ -29,12 +29,12 @@ export class GetModulesFromCourse implements ModulesUseCases.GetModulesFromCours
 		urlSearch.set('page', `${pagination.page ?? 1}`)
 		urlSearch.set('items_per_page', `${pagination.items_per_page ?? 10}`)
 
-		const { data: modules } = await this.httpClient.request<Array<CourseModule>>({
+		const { data: response } = await this.httpClient.request<ModulesResponse>({
 			method: 'GET',
 			url: `/course/${courseID}/modules?${urlSearch.toString()}`
 		})
 
-		// const { data: modules } = response
+		const { data: modules } = response
 
 		return modules.map(courseModule => {
 			const {
