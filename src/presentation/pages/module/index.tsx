@@ -37,15 +37,21 @@ export const ModulePage = () => {
 	}, [isMounted])
 
 	return (
-		<Stack>
+		<Stack p={2}>
 			<RenderIf condition={!isMounted}>
 				<CircularProgress />
 			</RenderIf>
 
 			<RenderIf condition={isMounted}>
-				<Typography>Modulo {currentModule?.title}</Typography>
+				<Typography
+					gutterBottom
+					variant="h4"
+					color="textSecondary"
+				>
+					{currentModule?.title}
+				</Typography>
 
-				<Stack p={2}>
+				<Stack>
 					{sections.map(({ id, title, lessons }) => (
 						<Accordion key={id}>
 							<AccordionSummary expandIcon={<FiChevronDown />}>
