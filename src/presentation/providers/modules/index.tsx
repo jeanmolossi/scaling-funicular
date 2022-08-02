@@ -3,6 +3,7 @@ import { ModulesUseCases } from '@/domain/modules/usecase'
 
 interface ModulesContextType {
 	getModulesFromCourse: ModulesUseCases.GetModulesFromCourse
+	getModuleByID: ModulesUseCases.GetModuleByID
 }
 
 interface WithChildrenProps extends ModulesContextType {
@@ -11,9 +12,10 @@ interface WithChildrenProps extends ModulesContextType {
 
 const ModulesContext = React.createContext<ModulesContextType>(null!)
 
-export function ModulesProvider ({ children, getModulesFromCourse }: WithChildrenProps) {
+export function ModulesProvider ({ children, getModulesFromCourse, getModuleByID }: WithChildrenProps) {
 	return <ModulesContext.Provider value={{
-		getModulesFromCourse
+		getModulesFromCourse,
+		getModuleByID
 	}}>{children}</ModulesContext.Provider>
 }
 

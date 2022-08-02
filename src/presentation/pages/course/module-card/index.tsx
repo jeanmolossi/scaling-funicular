@@ -23,7 +23,7 @@ export default function ModuleCard ({ module }: ModuleCardProps) {
 						component={Link}
 						variant="contained"
 						color="primary"
-						to={`/course/${module.course_id}/module/${module.id}`}
+						to={`/courses/${module.course_id}/module/${module.id}`}
 					>
 						<Videocam /> Abrir
 					</Button>

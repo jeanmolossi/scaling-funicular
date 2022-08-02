@@ -10,6 +10,7 @@ const MakeResetPasswordFactory = React.lazy(() => import('../factory/pages/reset
 const MakeBrowseFactory = React.lazy(() => import('../factory/pages/browse'))
 const MakeBrowseMoreInfoFactory = React.lazy(() => import('../factory/pages/browse-more-info'))
 const MakeCourse = React.lazy(() => import('../factory/pages/course'))
+const MakeModule = React.lazy(() => import('../factory/pages/module'))
 const MakeLesson = React.lazy(() => import('../factory/pages/lesson'))
 
 export function Router () {
@@ -65,6 +66,10 @@ export function Router () {
 								</RequireAuth>
 							}
 						>
+							<Route
+								path="module/:module_id"
+								element={<MakeModule />}
+							/>
 							<Route
 								path="/courses/:course_id/lessons/:lesson_id"
 								element={

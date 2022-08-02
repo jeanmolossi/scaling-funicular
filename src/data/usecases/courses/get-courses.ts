@@ -1,6 +1,6 @@
+import { Http } from '@/data/protocols/http/typings'
 import { Course } from '@/domain/courses'
 import { CoursesUseCases } from '@/domain/courses/usecase'
-import { Http } from '../protocols/http/typings'
 
 interface CourseResponse {
 	data: Array<{

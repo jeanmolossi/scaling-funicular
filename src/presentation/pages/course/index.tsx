@@ -14,7 +14,7 @@ import { MAX_COLUMNS } from './constants'
 import ModuleCard from './module-card'
 
 export const Course = () => {
-	const { course_id } = useParams()
+	const { course_id, module_id } = useParams()
 	const { getModulesFromCourse } = useModules()
 	const slideWrapperRef = useRef<HTMLElement>(null!)
 	const sliderRef = useRef<Slider>(null!)
@@ -58,56 +58,60 @@ export const Course = () => {
 
 	return (
 		<AuthLayout>
-			<Outlet />
+			<RenderIf condition={!!module_id}>
+				<Outlet />
+			</RenderIf>
 
-			<Typography variant='h3' component={'h1'}>
+			<RenderIf condition={!module_id}>
+				<Typography variant='h3' component={'h1'}>
 				Veja os modulos do curso
-			</Typography>
+				</Typography>
 
-			<Stack ref={slideWrapperRef} width="100%" p={4} gap={2} alignItems={'stretch'}>
-				<Card>
-					<Stack direction="row" spacing={2}>
-						<CardContent sx={{ flex: 1 }}>
-							<Typography variant='h6' component="h2">
+				<Stack ref={slideWrapperRef} width="100%" p={4} gap={2} alignItems={'stretch'}>
+					<Card>
+						<Stack direction="row" spacing={2}>
+							<CardContent sx={{ flex: 1 }}>
+								<Typography variant='h6' component="h2">
 							Navege pelos modulos do curso
-							</Typography>
-						</CardContent>
+								</Typography>
+							</CardContent>
 
-						<RenderIf condition={sliderControls}>
-							<CardActions>
-								<IconButton onClick={handlePrev}><ChevronLeftOutlined /></IconButton>
-								<IconButton onClick={handleNext}><ChevronRightOutlined /></IconButton>
-							</CardActions>
-						</RenderIf>
-					</Stack>
-				</Card>
+							<RenderIf condition={sliderControls}>
+								<CardActions>
+									<IconButton onClick={handlePrev}><ChevronLeftOutlined /></IconButton>
+									<IconButton onClick={handleNext}><ChevronRightOutlined /></IconButton>
+								</CardActions>
+							</RenderIf>
+						</Stack>
+					</Card>
 
-				<RenderIf condition={sliderControls}>
-					<Slider
-						ref={sliderRef}
-						dots={false}
-						infinite
-						speed={500}
-						slidesToShow={columns}
-						slidesToScroll={toSlide}
-						lazyLoad="ondemand"
-						nextArrow={<Hidden />}
-						prevArrow={<Hidden />}
-					>
-						{modules.map(module => (
-							<ModuleCard key={module.id} module={module} />
-						))}
-					</Slider>
-				</RenderIf>
+					<RenderIf condition={sliderControls}>
+						<Slider
+							ref={sliderRef}
+							dots={false}
+							infinite
+							speed={500}
+							slidesToShow={columns}
+							slidesToScroll={toSlide}
+							lazyLoad="ondemand"
+							nextArrow={<Hidden />}
+							prevArrow={<Hidden />}
+						>
+							{modules.map(module => (
+								<ModuleCard key={module.id} module={module} />
+							))}
+						</Slider>
+					</RenderIf>
 
-				<RenderIf condition={modules.length > 0 && !withSlider}>
-					<Stack direction={'row'} alignItems={'stretch'} alignContent={'stretch'}>
-						{modules.map(module => (
-							<ModuleCard key={module.id} module={module} />
-						))}
-					</Stack>
-				</RenderIf>
-			</Stack>
+					<RenderIf condition={modules.length > 0 && !withSlider}>
+						<Stack direction={'row'} alignItems={'stretch'} alignContent={'stretch'}>
+							{modules.map(module => (
+								<ModuleCard key={module.id} module={module} />
+							))}
+						</Stack>
+					</RenderIf>
+				</Stack>
+			</RenderIf>
 		</AuthLayout>
 	)
 }

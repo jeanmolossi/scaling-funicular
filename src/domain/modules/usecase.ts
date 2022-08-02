@@ -5,4 +5,8 @@ export namespace ModulesUseCases {
 	export interface GetModulesFromCourse {
 		execute(courseID: string, fields?: string[], pagination?: Http.Pagination): Promise<Module[]>
 	}
+
+	export interface GetModuleByID {
+		execute(moduleID: string): Promise<Module>
+	}
 }
