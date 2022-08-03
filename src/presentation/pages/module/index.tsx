@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { FiChevronDown } from 'react-icons/fi'
+import { FiChevronDown, FiVideo } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
-import Button from '@mui/joy/Button'
 import { Accordion, AccordionDetails, AccordionSummary, CircularProgress } from '@mui/material'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { Module } from '@/domain/modules'
@@ -15,10 +15,12 @@ import { useSections } from '@/presentation/providers/sections'
 export const ModulePage = () => {
 	const { module_id } = useParams()
 	const { getModuleByID } = useModules()
-	const { getSectionsFromModule } = useSections()
+	const { getSectionsFromModule, getLessonsFromSection } = useSections()
 
 	const [currentModule, setCurrentModule] = useState<Module|null>(null)
 	const [sections, setSections] = useState<Section[]>([])
+	const [lessonsLoaded, setLessonsLoaded] = useState<boolean>(false)
+	const [loading, setLoading] = useState(false)
 
 	const { isMounted, debouncedMount } = useLazyMount()
 
@@ -35,6 +37,34 @@ export const ModulePage = () => {
 				.then(setSections)
 		}
 	}, [isMounted])
+
+	useEffect(() => {
+		if (sections.length > 0 && !lessonsLoaded) {
+			const promises = sections.map(section =>
+				getLessonsFromSection.execute(section.id)
+			)
+
+			setLoading(true)
+			Promise.all(promises)
+				.then((sectionsLessons) =>
+					sectionsLessons.map((lessons, i) => {
+						const sectionID = lessons[0]?.section_id
+						const section = sections[i]
+
+						if (section && section.id === sectionID) {
+							section.attachLessons(lessons)
+						}
+
+						return section
+					})
+				)
+				.then((updated) => {
+					setSections(updated)
+					setLessonsLoaded(true)
+				})
+				.finally(() => setLoading(false))
+		}
+	}, [sections, lessonsLoaded])
 
 	return (
 		<Stack p={2}>
@@ -57,17 +87,29 @@ export const ModulePage = () => {
 							<AccordionSummary expandIcon={<FiChevronDown />}>
 								<Typography sx={{ width: '33%', flexShrink: 0 }} >{title}</Typography>
 								<Typography sx={{ color: 'text.secondary' }}>
-									{lessons.length > 0
-										? `${lessons.length} aulas`
-										: 'Nenhuma aula até o momento'
-									}
+									<RenderIf condition={!loading}>
+										{lessons.length > 0
+											? `${lessons.length} aulas`
+											: 'Nenhuma aula até o momento'
+										}
+									</RenderIf>
+
+									<RenderIf condition={loading}>
+										<CircularProgress />
+									</RenderIf>
 								</Typography>
 							</AccordionSummary>
 
 							<AccordionDetails>
 								<Stack>
 									{lessons.map(({ id: _id, title }) => (
-										<Button key={_id}>{title}</Button>
+										<Button
+											key={_id}
+											variant="contained"
+											startIcon={<FiVideo />}
+										>
+											{title}
+										</Button>
 									))}
 								</Stack>
 							</AccordionDetails>

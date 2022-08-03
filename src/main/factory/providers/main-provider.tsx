@@ -5,6 +5,7 @@ import { makeGetModulesFromCourse } from '@/main/factory/data/usecase/modules/ge
 import { AuthProvider, CoursesProvider } from '@/presentation/providers'
 import { ModulesProvider } from '@/presentation/providers/modules'
 import { SectionsProvider } from '@/presentation/providers/sections'
+import { makeGetLessonsFromSection } from '../data/usecase/sections/get-lessons-from-section'
 import { makeGetSectionsFromModule } from '../data/usecase/sections/get-sections-from-module'
 
 // MainProvider are wrapping all the application's providers
@@ -34,9 +35,11 @@ export function WithRouterProvider ({ children }: { children: React.ReactNode}) 
 	}
 
 	const getSectionsFromModule = makeGetSectionsFromModule()
+	const getLessonsFromSection = makeGetLessonsFromSection()
 
 	const sectionsFactory = {
-		getSectionsFromModule
+		getSectionsFromModule,
+		getLessonsFromSection
 	}
 
 	return (
