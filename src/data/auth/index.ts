@@ -35,6 +35,19 @@ export class Authenticator {
 		return 'logged out'
 	}
 
+	public async checkSession (): Promise<boolean> {
+		try {
+			await this.httpClient.request({
+				method: 'GET',
+				url: '/students/me?fields=student_id'
+			})
+
+			return true
+		} catch (e) {
+			return false
+		}
+	}
+
 	public getStudentSync (session: Authentication.MeStudentResult): Student {
 		return new Student(
 			session.student_id,

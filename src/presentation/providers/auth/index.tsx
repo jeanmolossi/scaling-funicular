@@ -26,7 +26,7 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 	const [student, setStudent] = storageProvider<Student>('student')
 
 	const authenticator = useMemo(() => new Authenticator(
-		new HttpClient(process.env.BASE_API || 'http://localhost:8080')
+		new HttpClient(process.env.BASE_API!)
 	), [])
 
 	const signin = useCallback(async (email: string, password: string, action?: () => void) => {
@@ -60,6 +60,10 @@ export function AuthProvider ({ children }: { children: React.ReactNode }) {
 		}
 	}, [student, location.pathname])
 
+	useEffect(() => {
+		authenticator.checkSession().then(clearSession(signout))
+	}, [location.pathname])
+
 	return <AuthContext.Provider value={{
 		student,
 		signin,
@@ -85,4 +89,18 @@ export function RequireAuth ({ children }: { children: JSX.Element }) {
 
 export function useAuth () {
 	return React.useContext(AuthContext)
+}
+
+type CheckSession = (isAuth: boolean) => Promise<void>
+type SignoutFn = () => Promise<void>
+
+/**
+ * clearSession is a function that clears the session if the user is not authenticated
+ * @param {SignoutFn} signout a function to sign out the user
+ * @returns {CheckSession} a function to check if the user is authenticated
+ */
+function clearSession (signout: SignoutFn): CheckSession {
+	return async (isAuth: boolean) => {
+		if (!isAuth) { await signout() }
+	}
 }
