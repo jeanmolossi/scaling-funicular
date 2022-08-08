@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { FiChevronDown, FiVideo } from 'react-icons/fi'
-import { useParams } from 'react-router-dom'
+import { FiChevronDown, FiLock, FiVideo } from 'react-icons/fi'
+import { Link, Outlet, useParams } from 'react-router-dom'
 import { Accordion, AccordionDetails, AccordionSummary, CircularProgress } from '@mui/material'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
@@ -67,56 +67,65 @@ export const ModulePage = () => {
 	}, [sections, lessonsLoaded])
 
 	return (
-		<Stack p={2}>
-			<RenderIf condition={!isMounted}>
-				<CircularProgress />
-			</RenderIf>
+		<>
+			<Outlet />
+			<Stack p={2}>
 
-			<RenderIf condition={isMounted}>
-				<Typography
-					gutterBottom
-					variant="h4"
-					color="textSecondary"
-				>
-					{currentModule?.title}
-				</Typography>
+				<RenderIf condition={!isMounted}>
+					<CircularProgress />
+				</RenderIf>
 
-				<Stack>
-					{sections.map(({ id, title, lessons }) => (
-						<Accordion key={id}>
-							<AccordionSummary expandIcon={<FiChevronDown />}>
-								<Typography sx={{ width: '33%', flexShrink: 0 }} >{title}</Typography>
-								<Typography sx={{ color: 'text.secondary' }}>
-									<RenderIf condition={!loading}>
-										{lessons.length > 0
-											? `${lessons.length} aulas`
-											: 'Nenhuma aula até o momento'
-										}
-									</RenderIf>
+				<RenderIf condition={isMounted}>
+					<Typography
+						gutterBottom
+						variant="h4"
+						color="textSecondary"
+					>
+						{currentModule?.title}
+					</Typography>
 
-									<RenderIf condition={loading}>
-										<CircularProgress />
-									</RenderIf>
-								</Typography>
-							</AccordionSummary>
+					<Stack>
+						{sections.map(({ id, title, lessons }) => (
+							<Accordion key={id}>
+								<AccordionSummary expandIcon={<FiChevronDown />}>
+									<Typography sx={{ width: '33%', flexShrink: 0 }} >{title}</Typography>
+									<Typography sx={{ color: 'text.secondary' }}>
+										<RenderIf condition={!loading}>
+											{lessons.length > 0
+												? `${lessons.length} aulas`
+												: 'Nenhuma aula até o momento'
+											}
+										</RenderIf>
 
-							<AccordionDetails>
-								<Stack>
-									{lessons.map(({ id: _id, title }) => (
-										<Button
-											key={_id}
-											variant="contained"
-											startIcon={<FiVideo />}
-										>
-											{title}
-										</Button>
-									))}
-								</Stack>
-							</AccordionDetails>
-						</Accordion>
-					))}
-				</Stack>
-			</RenderIf>
-		</Stack>
+										<RenderIf condition={loading}>
+											<CircularProgress />
+										</RenderIf>
+									</Typography>
+								</AccordionSummary>
+
+								<AccordionDetails>
+									<Stack>
+										{lessons.map(({ id: _id, title, hasVideo }) => {
+											return (
+												<Button
+													key={_id}
+													variant="contained"
+													startIcon={!hasVideo ? <FiLock /> : <FiVideo />}
+													component={Link}
+													to={`lesson/${_id}`}
+													disabled={!hasVideo}
+												>
+													{title}
+												</Button>
+											)
+										})}
+									</Stack>
+								</AccordionDetails>
+							</Accordion>
+						))}
+					</Stack>
+				</RenderIf>
+			</Stack>
+		</>
 	)
 }

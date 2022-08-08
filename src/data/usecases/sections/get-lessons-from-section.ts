@@ -4,11 +4,13 @@ import { SectionUseCases } from '@/domain/sections/usecase'
 
 interface SectionLessonsResponse {
 	data: Array<{
-		lesson_id: string
-		lesson_title: string
-		lesson_thumbnail: string
-		lesson_description: string
-		lesson_published: boolean
+		id: string
+		title: string
+		thumbnail: string
+		video_preview?: string
+		video?: string
+		description: string
+		published: boolean
 	}>
 }
 
@@ -31,12 +33,14 @@ export class GetLessonsFromSection implements SectionUseCases.GetLessonsFromSect
 		})
 
 		return lessons.map(lesson => new Lesson(
-			lesson.lesson_id,
+			lesson.id,
 			sectionID,
-			lesson.lesson_title,
-			lesson.lesson_description,
-			lesson.lesson_thumbnail,
-			lesson.lesson_published
+			lesson.title,
+			lesson.description,
+			lesson.thumbnail,
+			lesson.video_preview,
+			lesson.video,
+			lesson.published
 		))
 	}
 }

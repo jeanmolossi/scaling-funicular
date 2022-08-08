@@ -7,7 +7,9 @@ export class Lesson extends BaseEntity<string> {
 		private _title: string,
 		private _description: string,
 		private _thumbnail: string,
-		private _published: boolean
+		private _video_preview: string = '',
+		private _video: string = '',
+		private _published: boolean = false
 	) {
 		super(_id)
 	}
@@ -26,6 +28,18 @@ export class Lesson extends BaseEntity<string> {
 
 	get thumbnail (): string {
 		return this._thumbnail
+	}
+
+	get preview (): string {
+		return this._video_preview
+	}
+
+	get video (): string {
+		return this._video
+	}
+
+	get hasVideo (): boolean {
+		return !!this._video
 	}
 
 	get published (): boolean {

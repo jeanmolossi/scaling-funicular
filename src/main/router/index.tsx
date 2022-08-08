@@ -69,15 +69,12 @@ export function Router () {
 							<Route
 								path="module/:module_id"
 								element={<MakeModule />}
-							/>
-							<Route
-								path="/courses/:course_id/lessons/:lesson_id"
-								element={
-									<RequireAuth>
-										<MakeLesson />
-									</RequireAuth>
-								}
-							/>
+							>
+								<Route
+									path="lesson/:lesson_id"
+									element={<MakeLesson />}
+								/>
+							</Route>
 						</Route>
 
 						<Route
